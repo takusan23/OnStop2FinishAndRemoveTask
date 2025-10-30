@@ -59,7 +59,7 @@ private fun AppListItem(
     val context = LocalContext.current
     val bitmap = remember { mutableStateOf<ImageBitmap?>(null) }
     LaunchedEffect(key1 = Unit) {
-        bitmap.value = context.packageManager.getApplicationIcon(info.packageName)?.toBitmap()?.asImageBitmap()
+        bitmap.value = context.packageManager.getApplicationIcon(info.packageName).toBitmap().asImageBitmap()
     }
 
     Row(

@@ -1,0 +1,3 @@
+- android.jar を AOSP のものに差し替える必要があります
+  - Android Studio の Invalidate cache を実行する必要があるかもしれません
+  - 普段のアプリ開発に戻る場合は元あった android.jar に戻す必要があります

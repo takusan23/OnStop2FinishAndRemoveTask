@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "io.github.takusan23.onstop2finishandremovetask"
-        minSdk = 24
+        minSdk = 29
         targetSdk = 36
         versionCode = 1
         versionName = "1.0.0"

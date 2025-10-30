@@ -11,15 +11,9 @@ import rikka.shizuku.Shizuku
 
 @Composable
 fun MainScreen() {
-    val backStack = remember {
-        mutableStateListOf(
-            if (Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
-                RoutePaths.AppList
-            } else {
-                RoutePaths.ShizukuSetup
-            }
-        )
-    }
+
+    // Shizuku 権限なければ
+    val backStack = remember { mutableStateListOf(if (Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) RoutePaths.AppList else RoutePaths.ShizukuSetup) }
 
     NavDisplay(
         backStack = backStack,
@@ -29,6 +23,7 @@ fun MainScreen() {
                 RoutePaths.ShizukuSetup -> NavEntry(RoutePaths.ShizukuSetup) {
                     ShizukuSetupScreen(onGranted = {
                         // 前の画面に戻れなくする
+                        backStack.clear()
                         backStack.add(RoutePaths.AppList)
                     })
                 }
