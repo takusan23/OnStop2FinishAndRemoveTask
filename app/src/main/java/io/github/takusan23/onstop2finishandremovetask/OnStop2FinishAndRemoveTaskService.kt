@@ -19,9 +19,12 @@ import io.github.takusan23.onstop2finishandremovetask.tool.ShizukuServiceTool
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -147,7 +150,15 @@ class OnStop2FinishAndRemoveTaskService : Service() {
 
         ShizukuServiceTool.activity.registerTaskStackListener(listener)
         awaitClose { ShizukuServiceTool.activity.unregisterTaskStackListener(listener) }
-    }.stateIn(scope, kotlinx.coroutines.flow.SharingStarted.Eagerly, null)
+    }.distinctUntilChanged { a, b ->
+        a?.topActivity?.packageName == b?.topActivity?.packageName
+    }.stateIn(
+        scope = scope,
+        started = SharingStarted.Eagerly,
+        initialValue = null
+    ).onEach {
+        println("onEach ${it?.topActivity?.packageName}")
+    }
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -176,7 +187,6 @@ class OnStop2FinishAndRemoveTaskService : Service() {
                                 R.string.service_onstop_2_finish_and_remove_task_task_removed_toast_message_format,
                                 removeTask.topActivityInfo?.loadLabel(packageManager)
                             ),
-                            //"[${removeTask.topActivityInfo?.loadLabel(packageManager)}] タスクを削除しました",
                             Toast.LENGTH_SHORT,
                             isUiContext,
                             displayId,
