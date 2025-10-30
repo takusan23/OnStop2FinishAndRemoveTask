@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
@@ -63,7 +64,12 @@ private fun AppListItem(
     }
 
     Row(
-        modifier = modifier.padding(10.dp),
+        modifier = modifier
+            .toggleable(
+                value = info.isRegistered,
+                onValueChange = { onCheck(it, info.packageName) }
+            )
+            .padding(10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(5.dp)
     ) {
