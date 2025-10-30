@@ -34,10 +34,12 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
 
             // Shizuku の権限付与まで待つ
-            suspendCoroutine { continuation ->
-                Shizuku.addRequestPermissionResultListener { _, grantResult ->
-                    if (grantResult == PackageManager.PERMISSION_GRANTED) {
-                        continuation.resume(Unit)
+            if (Shizuku.checkSelfPermission() != PackageManager.PERMISSION_GRANTED) {
+                suspendCoroutine { continuation ->
+                    Shizuku.addRequestPermissionResultListener { _, grantResult ->
+                        if (grantResult == PackageManager.PERMISSION_GRANTED) {
+                            continuation.resume(Unit)
+                        }
                     }
                 }
             }
