@@ -12,10 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import io.github.takusan23.onstop2finishandremovetask.R
 import rikka.shizuku.Shizuku
 
 private const val SHIZUKU_PERMISSION_CODE = 2525
@@ -54,10 +56,10 @@ fun ShizukuSetupScreen(onGranted: () -> Unit) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "「Shizuku」のセットアップが必要です。")
-            Text(text = "セットアップが完了したら、このアプリに権限を付与してください。")
+            Text(text = stringResource(R.string.screen_shizuku_setup_required_message_1))
+            Text(text = stringResource(R.string.screen_shizuku_setup_required_message_2))
             Button(onClick = { Shizuku.requestPermission(SHIZUKU_PERMISSION_CODE) }) {
-                Text(text = "Shizukuの権限付与")
+                Text(text = stringResource(R.string.screen_shizuku_setup_request_permission_button))
             }
         }
     }

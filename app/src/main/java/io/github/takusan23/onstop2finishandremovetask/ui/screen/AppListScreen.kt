@@ -25,9 +25,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
+import io.github.takusan23.onstop2finishandremovetask.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,7 +38,7 @@ fun AppListScreen(viewModel: AppListViewModel) {
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("有効にするアプリ選択") })
+            TopAppBar(title = { Text(stringResource(R.string.screen_app_list_top_app_bar_title)) })
         }
     ) { paddingValues ->
         LazyColumn(contentPadding = paddingValues) {

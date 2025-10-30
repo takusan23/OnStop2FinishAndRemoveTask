@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">OnStop2FinishAndRemoveTask</string>
+    <string name="screen_shizuku_setup_required_message_1">"Shizuku" setup is required.</string>
+    <string name="screen_shizuku_setup_required_message_2">Once setup is complete, please grant this app the required permission.</string>
+    <string name="screen_shizuku_setup_request_permission_button">Grant Shizuku Permission</string>
+    <string name="screen_app_list_top_app_bar_title">Select Apps to Enable</string>
+    <string name="service_onstop_2_finish_and_remove_task_notification_channel_name">Running Notification</string>
+    <string name="service_onstop_2_finish_and_remove_task_running_notification_title">OnStop2FinishAndRemoveTask Running</string>
+    <string name="service_onstop_2_finish_and_remove_task_running_notification_text">Service is active</string>
+    <string name="service_onstop_2_finish_and_remove_task_task_removed_toast_message_format">[%s] task removed</string>
 </resources>

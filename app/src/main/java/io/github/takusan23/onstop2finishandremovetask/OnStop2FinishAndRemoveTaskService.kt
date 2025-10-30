@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-
+/** 今表示されている Activity が離れた（ほかアプリに切り替えた）時に Activity を終了する */
 class OnStop2FinishAndRemoveTaskService : Service() {
 
     private val scope = MainScope()
@@ -171,7 +171,12 @@ class OnStop2FinishAndRemoveTaskService : Service() {
                         ShizukuServiceTool.notification.enqueueTextToast(
                             "com.android.shell",
                             Binder(),
-                            "[${removeTask.topActivityInfo?.loadLabel(packageManager)}] タスクを削除しました",
+                            getString(
+                                // 変更
+                                R.string.service_onstop_2_finish_and_remove_task_task_removed_toast_message_format,
+                                removeTask.topActivityInfo?.loadLabel(packageManager)
+                            ),
+                            //"[${removeTask.topActivityInfo?.loadLabel(packageManager)}] タスクを削除しました",
                             Toast.LENGTH_SHORT,
                             isUiContext,
                             displayId,
@@ -201,13 +206,13 @@ class OnStop2FinishAndRemoveTaskService : Service() {
     private fun startForegroundService() {
         if (notificationManager.getNotificationChannel(CHANNEL_ID) == null) {
             val notificationChannel = NotificationChannelCompat.Builder(CHANNEL_ID, NotificationManager.IMPORTANCE_LOW).apply {
-                setName("実行中通知")
+                setName(getString(R.string.service_onstop_2_finish_and_remove_task_notification_channel_name))
             }.build()
             notificationManager.createNotificationChannel(notificationChannel)
         }
         val notification = NotificationCompat.Builder(this, CHANNEL_ID).apply {
-            setContentTitle("OnStop2FinishAndRemoveTask 実行中通知")
-            setContentText("動作中です")
+            setContentTitle(getString(R.string.service_onstop_2_finish_and_remove_task_running_notification_title))
+            setContentText(getString(R.string.service_onstop_2_finish_and_remove_task_running_notification_text))
             setSmallIcon(R.drawable.ic_launcher_foreground)
         }.build()
         startForeground(1, notification)

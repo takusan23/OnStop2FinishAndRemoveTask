@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OnStop2FinishAndRemoveTask</string>
+    <string name="screen_shizuku_setup_required_message_1">「Shizuku」のセットアップが必要です。</string>
+    <string name="screen_shizuku_setup_required_message_2">セットアップが完了したら、このアプリに権限を付与してください。</string>
+    <string name="screen_shizuku_setup_request_permission_button">Shizukuの権限付与</string>
+    <string name="screen_app_list_top_app_bar_title">有効にするアプリ選択</string>
+    <string name="service_onstop_2_finish_and_remove_task_notification_channel_name">実行中通知</string>
+    <string name="service_onstop_2_finish_and_remove_task_running_notification_title">OnStop2FinishAndRemoveTask 実行中通知</string>
+    <string name="service_onstop_2_finish_and_remove_task_running_notification_text">動作中です</string>
+    <string name="service_onstop_2_finish_and_remove_task_task_removed_toast_message_format">[%s]タスクを削除しました</string>
+</resources>
