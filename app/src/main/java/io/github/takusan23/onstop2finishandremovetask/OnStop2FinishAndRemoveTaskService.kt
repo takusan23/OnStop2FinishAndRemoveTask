@@ -165,9 +165,8 @@ class OnStop2FinishAndRemoveTaskService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? = null
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForegroundService()
-
+    override fun onCreate() {
+        super.onCreate()
         scope.launch {
             RegisterAppListTool.realtimeReadApplicationIdList(this@OnStop2FinishAndRemoveTaskService).collectLatest { idList ->
 
@@ -210,7 +209,10 @@ class OnStop2FinishAndRemoveTaskService : Service() {
                 }
             }
         }
+    }
 
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        startForegroundService()
         return START_NOT_STICKY
     }
 
