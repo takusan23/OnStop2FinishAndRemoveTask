@@ -36,7 +36,10 @@ class OnStop2FinishAndRemoveTaskService : Service() {
 
     private val notificationManager by lazy { NotificationManagerCompat.from(this) }
 
-    /** 最前面に表示された Activity を取得する */
+    /**
+     * 最前面に表示された Activity を取得する
+     * StateFlow にしていつ first しても同じ値が来るように（起動し直さない）
+     */
     val taskStackHotFlow = callbackFlow {
         val listener = object : ITaskStackListener.Stub() {
             override fun onTaskStackChanged() {
@@ -152,13 +155,13 @@ class OnStop2FinishAndRemoveTaskService : Service() {
         awaitClose { ShizukuServiceTool.activity.unregisterTaskStackListener(listener) }
     }.distinctUntilChanged { a, b ->
         a?.topActivity?.packageName == b?.topActivity?.packageName
+    }.onEach {
+        // println("onEach ${it?.topActivity?.packageName}")
     }.stateIn(
         scope = scope,
         started = SharingStarted.Eagerly,
         initialValue = null
-    ).onEach {
-        println("onEach ${it?.topActivity?.packageName}")
-    }
+    )
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -167,13 +170,16 @@ class OnStop2FinishAndRemoveTaskService : Service() {
 
         scope.launch {
             RegisterAppListTool.realtimeReadApplicationIdList(this@OnStop2FinishAndRemoveTaskService).collectLatest { idList ->
+
                 while (isActive) {
+
                     // 削除対象が来るまで待つ
                     val removeTask = taskStackHotFlow.first { info -> info?.topActivity?.packageName in idList }
                     // 別のアプリが開かれるのを待つ
                     taskStackHotFlow.first { info -> info?.topActivity?.packageName !in idList }
 
                     if (removeTask != null) {
+
                         // 削除する
                         ShizukuServiceTool.activity.removeTask(removeTask.taskId)
 
