@@ -9,4 +9,8 @@
     <string name="service_onstop_2_finish_and_remove_task_running_notification_title">OnStop2FinishAndRemoveTask 実行中通知</string>
     <string name="service_onstop_2_finish_and_remove_task_running_notification_text">動作中です</string>
     <string name="service_onstop_2_finish_and_remove_task_task_removed_toast_message_format">[%s]タスクを削除しました</string>
+    <string name="screen_app_list_search_bottomsheet_search_app_name_label">アプリ名</string>
+    <string name="screen_app_list_search_bottomsheet_search_package_name_label">アプリケーションID名</string>
+    <string name="screen_app_list_search_bottomsheet_include_system_app_label">システムアプリを含める</string>
+    <string name="screen_app_list_search_bottomsheet_only_register_app_label">登録済みのみを表示する</string>
 </resources>

@@ -8,4 +8,8 @@
     <string name="service_onstop_2_finish_and_remove_task_running_notification_title">OnStop2FinishAndRemoveTask Running</string>
     <string name="service_onstop_2_finish_and_remove_task_running_notification_text">Service is active</string>
     <string name="service_onstop_2_finish_and_remove_task_task_removed_toast_message_format">[%s] task removed</string>
+    <string name="screen_app_list_search_bottomsheet_search_app_name_label">App name</string>
+    <string name="screen_app_list_search_bottomsheet_search_package_name_label">Application id name</string>
+    <string name="screen_app_list_search_bottomsheet_include_system_app_label">Include system apps</string>
+    <string name="screen_app_list_search_bottomsheet_only_register_app_label">Only Register apps</string>
 </resources>

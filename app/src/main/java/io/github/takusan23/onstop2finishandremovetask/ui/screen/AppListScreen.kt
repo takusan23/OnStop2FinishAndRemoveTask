@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,6 +12,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -18,6 +25,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -25,24 +33,37 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
 import io.github.takusan23.onstop2finishandremovetask.R
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppListScreen(viewModel: AppListViewModel) {
     val appList = viewModel.appListFlow.collectAsState(emptyList())
+    val showSearchBottomSheet = remember { mutableStateOf(false) }
+    val searchOption = viewModel.searchOptionFlow.collectAsState()
+
+    if (showSearchBottomSheet.value) {
+        SearchBottomSheet(
+            onClose = { showSearchBottomSheet.value = false },
+            searchOption = searchOption.value,
+            onUpdate = { viewModel.updateSearchOption(it) }
+        )
+    }
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(stringResource(R.string.screen_app_list_top_app_bar_title)) })
+            TopAppBarWithSearchIcon(
+                currentSearch = searchOption != AppListViewModel.SearchOption.EMPTY,
+                onClick = { showSearchBottomSheet.value = true }
+            )
         }
     ) { paddingValues ->
         LazyColumn(contentPadding = paddingValues) {
-            items(appList.value) { info ->
+            items(appList.value, key = { it.packageName }) { info ->
                 AppListItem(
                     info = info,
                     onCheck = { isRegistered, packageName -> viewModel.registerApp(isRegistered, packageName) }
@@ -51,6 +72,106 @@ fun AppListScreen(viewModel: AppListViewModel) {
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SearchBottomSheet(
+    onClose: () -> Unit,
+    searchOption: AppListViewModel.SearchOption,
+    onUpdate: (AppListViewModel.SearchOption) -> Unit
+) {
+
+    fun update(
+        searchAppName: String = searchOption.searchAppName,
+        searchPackageName: String = searchOption.searchPackageName,
+        isIncludeSystemApp: Boolean = searchOption.isIncludeSystemApp,
+        isOnlyRegisterApp: Boolean = searchOption.isOnlyRegisterApp
+    ) {
+        onUpdate(
+            searchOption.copy(
+                searchAppName = searchAppName,
+                searchPackageName = searchPackageName,
+                isIncludeSystemApp = isIncludeSystemApp,
+                isOnlyRegisterApp = isOnlyRegisterApp
+            )
+        )
+    }
+
+    @Composable
+    fun SwitchWithLabel(
+        modifier: Modifier = Modifier,
+        label: String,
+        value: Boolean,
+        onChange: (Boolean) -> Unit
+    ) {
+        Row(
+            modifier = modifier
+                .toggleable(value = value, onValueChange = onChange)
+                .padding(10.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(
+                text = label,
+                modifier = Modifier.weight(1f)
+            )
+            Switch(
+                checked = value,
+                onCheckedChange = null
+            )
+        }
+    }
+
+    ModalBottomSheet(onDismissRequest = onClose) {
+        Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp),
+                value = searchOption.searchAppName,
+                onValueChange = { update(searchAppName = it) },
+                label = { Text("アプリ名") }
+            )
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp),
+                value = searchOption.searchPackageName,
+                onValueChange = { update(searchPackageName = it) },
+                label = { Text("アプリケーションID名") }
+            )
+            SwitchWithLabel(
+                label = "システムアプリを含める",
+                value = searchOption.isIncludeSystemApp,
+                onChange = { update(isIncludeSystemApp = it) }
+            )
+            SwitchWithLabel(
+                label = "登録済みのみを表示する",
+                value = searchOption.isOnlyRegisterApp,
+                onChange = { update(isOnlyRegisterApp = it) }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TopAppBarWithSearchIcon(
+    currentSearch: Boolean,
+    onClick: () -> Unit
+) {
+    TopAppBar(
+        title = { Text(stringResource(R.string.screen_app_list_top_app_bar_title)) },
+        actions = {
+            IconButton(onClick = onClick) {
+                Icon(
+                    painter = painterResource(R.drawable.search_24px),
+                    contentDescription = null,
+                    tint = if (currentSearch) MaterialTheme.colorScheme.primary else LocalContentColor.current
+                )
+            }
+        }
+    )
 }
 
 @Composable
