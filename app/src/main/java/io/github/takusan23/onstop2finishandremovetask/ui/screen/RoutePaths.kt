@@ -4,5 +4,9 @@ enum class RoutePaths(val path: String) {
 
     ShizukuSetup("shizuku_setup"),
 
-    AppList("app_list");
+    AppList("app_list"),
+
+    Setting("setting"),
+
+    License("license");
 }

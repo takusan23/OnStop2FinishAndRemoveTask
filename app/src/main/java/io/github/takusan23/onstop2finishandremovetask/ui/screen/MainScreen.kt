@@ -29,7 +29,18 @@ fun MainScreen() {
                 }
 
                 RoutePaths.AppList -> NavEntry(RoutePaths.AppList) {
-                    AppListScreen(viewModel = viewModel())
+                    AppListScreen(
+                        viewModel = viewModel(),
+                        onNavigate = { backStack += it }
+                    )
+                }
+
+                RoutePaths.Setting -> NavEntry(RoutePaths.Setting) {
+                    SettingScreen(onNavigation = { backStack += it })
+                }
+
+                RoutePaths.License -> NavEntry(RoutePaths.License) {
+                    LicenseScreen()
                 }
             }
         }

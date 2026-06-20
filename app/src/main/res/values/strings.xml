@@ -12,4 +12,8 @@
     <string name="screen_app_list_search_bottomsheet_search_package_name">Application id name</string>
     <string name="screen_app_list_search_bottomsheet_include_system_app">Include system apps</string>
     <string name="screen_app_list_search_bottomsheet_only_register_app">Only Register apps</string>
+    <string name="screen_setting_title">Settings</string>
+    <string name="screen_setting_license_title">License</string>
+    <string name="screen_setting_github_title">Open GitHub</string>
+    <string name="screen_license_title">License</string>
 </resources>

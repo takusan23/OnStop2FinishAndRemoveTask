@@ -40,7 +40,10 @@ import androidx.core.graphics.drawable.toBitmap
 import io.github.takusan23.onstop2finishandremovetask.R
 
 @Composable
-fun AppListScreen(viewModel: AppListViewModel) {
+fun AppListScreen(
+    viewModel: AppListViewModel,
+    onNavigate: (RoutePaths) -> Unit
+) {
     val appList = viewModel.appListFlow.collectAsState(emptyList())
     val showSearchBottomSheet = remember { mutableStateOf(false) }
     val searchOption = viewModel.searchOptionFlow.collectAsState()
@@ -57,7 +60,8 @@ fun AppListScreen(viewModel: AppListViewModel) {
         topBar = {
             TopAppBarWithSearchIcon(
                 currentSearch = searchOption != AppListViewModel.SearchOption.EMPTY,
-                onClick = { showSearchBottomSheet.value = true }
+                onSearchClick = { showSearchBottomSheet.value = true },
+                onSettingClick = { onNavigate(RoutePaths.Setting) }
             )
         }
     ) { paddingValues ->
@@ -157,16 +161,23 @@ private fun SearchBottomSheet(
 @Composable
 private fun TopAppBarWithSearchIcon(
     currentSearch: Boolean,
-    onClick: () -> Unit
+    onSearchClick: () -> Unit,
+    onSettingClick: () -> Unit
 ) {
     TopAppBar(
         title = { Text(stringResource(R.string.screen_app_list_top_app_bar_title)) },
         actions = {
-            IconButton(onClick = onClick) {
+            IconButton(onClick = onSearchClick) {
                 Icon(
                     painter = painterResource(R.drawable.search_24px),
                     contentDescription = null,
                     tint = if (currentSearch) MaterialTheme.colorScheme.primary else LocalContentColor.current
+                )
+            }
+            IconButton(onClick = onSettingClick) {
+                Icon(
+                    painter = painterResource(R.drawable.settings_24px),
+                    contentDescription = null
                 )
             }
         }
