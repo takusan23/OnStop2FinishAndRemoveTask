@@ -25,7 +25,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -130,7 +129,7 @@ private fun SearchBottomSheet(
                     .padding(horizontal = 10.dp),
                 value = searchOption.searchAppName,
                 onValueChange = { update(searchAppName = it) },
-                label = { Text("アプリ名") }
+                label = { Text(stringResource(R.string.screen_app_list_search_bottomsheet_search_app_name)) }
             )
             OutlinedTextField(
                 modifier = Modifier
@@ -138,15 +137,15 @@ private fun SearchBottomSheet(
                     .padding(horizontal = 10.dp),
                 value = searchOption.searchPackageName,
                 onValueChange = { update(searchPackageName = it) },
-                label = { Text("アプリケーションID名") }
+                label = { Text(stringResource(R.string.screen_app_list_search_bottomsheet_search_package_name)) }
             )
             SwitchWithLabel(
-                label = "システムアプリを含める",
+                label = stringResource(R.string.screen_app_list_search_bottomsheet_include_system_app),
                 value = searchOption.isIncludeSystemApp,
                 onChange = { update(isIncludeSystemApp = it) }
             )
             SwitchWithLabel(
-                label = "登録済みのみを表示する",
+                label = stringResource(R.string.screen_app_list_search_bottomsheet_only_register_app),
                 value = searchOption.isOnlyRegisterApp,
                 onChange = { update(isOnlyRegisterApp = it) }
             )
