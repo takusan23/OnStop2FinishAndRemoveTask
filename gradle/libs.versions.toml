@@ -1,5 +1,5 @@
 [versions]
-agp = "8.13.0"
+agp = "9.2.1"
 datastorePreferences = "1.1.7"
 kotlin = "2.2.20"
 coreKtx = "1.17.0"
@@ -8,9 +8,9 @@ junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.9.4"
 activityCompose = "1.11.0"
-composeBom = "2025.10.01"
+composeBom = "2026.06.00"
 lifecycleViewmodelNavigation3 = "2.10.0-beta01"
-nav3Core = "1.0.0-beta01"
+nav3Core = "1.1.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

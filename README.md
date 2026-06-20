@@ -45,6 +45,15 @@ this APIs Invoke by `Shizuku`. that's because, using API is Internal-API.
 Available build in latest Android Studio.
 
 ## ビルド手順 / step
+隠し`API`を呼び出しています。  
+`aidl`と`android.app.`パッケージのクラスを`AOSP`のソースコード（ cs.android.com ）からコピーしてきたため、`android.jar`の差し替えは不要です。  
+`git clone`したら`Android Studio`で開いてください。
+
+Invoke Hidden API.  
+This app Copied using `.aidl` file and `android.app` package `java class` from `AOSP` ( cs.android.com ). No need replace `android.jar`.  
+Execute `git clone` and open `Android Studio`.
+
+### 古いコミットの場合 / checkout old commit hash
 
 https://github.com/Reginer/aosp-android-jar
 

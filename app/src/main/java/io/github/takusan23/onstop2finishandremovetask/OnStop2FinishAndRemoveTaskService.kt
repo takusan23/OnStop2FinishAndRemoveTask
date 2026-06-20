@@ -6,6 +6,7 @@ import android.app.ITransientNotificationCallback
 import android.app.NotificationManager
 import android.app.Service
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
@@ -28,6 +29,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import rikka.shizuku.Shizuku
 
 /** 今表示されている Activity が離れた（ほかアプリに切り替えた）時に Activity を終了する */
 class OnStop2FinishAndRemoveTaskService : Service() {
@@ -183,7 +185,10 @@ class OnStop2FinishAndRemoveTaskService : Service() {
                         ShizukuServiceTool.activity.removeTask(removeTask.taskId)
 
                         // Shizuku 権限で Toast を出す
-                        // Suppressing toast from package .... エラーで正規ルートでは表示できない
+                        val displayId = Context::class.java
+                            .methods
+                            .first { it.name == "getDisplayId" }
+                            .invoke(this@OnStop2FinishAndRemoveTaskService) as Int
                         ShizukuServiceTool.notification.enqueueTextToast(
                             "com.android.shell",
                             Binder(),
