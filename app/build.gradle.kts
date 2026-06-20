@@ -6,13 +6,13 @@ plugins {
 android {
     namespace = "io.github.takusan23.onstop2finishandremovetask"
     compileSdk {
-        version = release(36)
+        version = release(37)
     }
 
     defaultConfig {
         applicationId = "io.github.takusan23.onstop2finishandremovetask"
         minSdk = 31
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0.0"
 
@@ -41,11 +41,10 @@ android {
 dependencies {
 
     // shizuku
-    val shizuku_version = "13.1.0"
-    implementation("dev.rikka.shizuku:api:$shizuku_version")
+    implementation(libs.shizuku.api)
     // Add this line if you want to support Shizuku
-    implementation("dev.rikka.shizuku:provider:$shizuku_version")
-    implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.3")
+    implementation(libs.shizuku.provider)
+    implementation(libs.hiddenapibypass)
 
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
