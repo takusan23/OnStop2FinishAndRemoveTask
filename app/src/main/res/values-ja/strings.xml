@@ -16,5 +16,6 @@
     <string name="screen_setting_title">設定</string>
     <string name="screen_setting_license_title">ライセンス</string>
     <string name="screen_setting_github_title">GitHub を開く</string>
-    <string name="screen_license_title">License</string>
+    <string name="screen_license_title">ライセンス</string>
+    <string name="screen_app_list_search_bottomsheet_title">検索</string>
 </resources>

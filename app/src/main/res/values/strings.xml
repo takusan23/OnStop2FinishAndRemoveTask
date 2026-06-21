@@ -16,4 +16,5 @@
     <string name="screen_setting_license_title">License</string>
     <string name="screen_setting_github_title">Open GitHub</string>
     <string name="screen_license_title">License</string>
+    <string name="screen_app_list_search_bottomsheet_title">Search</string>
 </resources>

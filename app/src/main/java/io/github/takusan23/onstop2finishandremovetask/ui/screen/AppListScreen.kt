@@ -127,6 +127,11 @@ private fun SearchBottomSheet(
 
     ModalBottomSheet(onDismissRequest = onClose) {
         Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+            Text(
+                modifier = Modifier.padding(horizontal = 10.dp),
+                text = stringResource(R.string.screen_app_list_search_bottomsheet_title),
+                fontSize = 20.sp
+            )
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
