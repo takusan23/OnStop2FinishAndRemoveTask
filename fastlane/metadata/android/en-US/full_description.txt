@@ -1,0 +1,10 @@
+If change other app, Auto close task in prev app.
+
+The app must be registered.
+
+This app is required Shizuku APP. Please prepare Shizuku.
+https://shizuku.rikka.app/
+
+How to work:
+Observe current Activity From Foreground service. If change other app, Invoke remove task function.
+this APIs Invoke by Shizuku. that's because, using API is Internal-API.

@@ -1,0 +1,2 @@
+add search to app-list screen.
+filterable name or application-id or system-app.

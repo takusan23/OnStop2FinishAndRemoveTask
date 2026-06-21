@@ -1,0 +1,1 @@
+If change other app, Auto close task in prev app. Required Shizuku APP.
