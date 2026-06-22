@@ -11,10 +11,10 @@ import androidx.lifecycle.lifecycleScope
 import io.github.takusan23.onstop2finishandremovetask.ui.screen.MainScreen
 import io.github.takusan23.onstop2finishandremovetask.ui.theme.OnStop2FinishAndRemoveTaskTheme
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 import rikka.shizuku.Shizuku
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,12 +35,17 @@ class MainActivity : ComponentActivity() {
 
             // Shizuku の権限付与まで待つ
             if (Shizuku.checkSelfPermission() != PackageManager.PERMISSION_GRANTED) {
-                suspendCoroutine { continuation ->
-                    Shizuku.addRequestPermissionResultListener { _, grantResult ->
-                        if (grantResult == PackageManager.PERMISSION_GRANTED) {
-                            continuation.resume(Unit)
+                suspendCancellableCoroutine { continuation ->
+                    val listener = object : Shizuku.OnRequestPermissionResultListener {
+                        override fun onRequestPermissionResult(requestCode: Int, grantResult: Int) {
+                            if (grantResult == PackageManager.PERMISSION_GRANTED) {
+                                Shizuku.removeRequestPermissionResultListener(this)
+                                continuation.resume(Unit)
+                            }
                         }
                     }
+                    Shizuku.addRequestPermissionResultListener(listener)
+                    continuation.invokeOnCancellation { Shizuku.removeRequestPermissionResultListener(listener) }
                 }
             }
 

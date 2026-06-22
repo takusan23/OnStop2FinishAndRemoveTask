@@ -9,6 +9,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
 import android.widget.Toast
 import android.window.TaskSnapshot
@@ -29,7 +30,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import rikka.shizuku.Shizuku
 
 /** 今表示されている Activity が離れた（ほかアプリに切り替えた）時に Activity を終了する */
 class OnStop2FinishAndRemoveTaskService : Service() {
@@ -189,27 +189,56 @@ class OnStop2FinishAndRemoveTaskService : Service() {
                             .methods
                             .first { it.name == "getDisplayId" }
                             .invoke(this@OnStop2FinishAndRemoveTaskService) as Int
-                        ShizukuServiceTool.notification.enqueueTextToast(
-                            "com.android.shell",
-                            Binder(),
-                            getString(
-                                // 変更
-                                R.string.service_onstop_2_finish_and_remove_task_task_removed_toast_message_format,
-                                removeTask.topActivityInfo?.loadLabel(packageManager)
-                            ),
-                            Toast.LENGTH_SHORT,
-                            isUiContext,
-                            displayId,
-                            object : ITransientNotificationCallback.Stub() {
-                                override fun onToastShown() {
-                                    // do nothing
-                                }
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                            // android 14 以降
+                            ShizukuServiceTool.notification.enqueueTextToast(
+                                "com.android.shell",
+                                Binder(),
+                                getString(
+                                    // 変更
+                                    R.string.service_onstop_2_finish_and_remove_task_task_removed_toast_message_format,
+                                    removeTask.topActivityInfo?.loadLabel(packageManager)
+                                ),
+                                Toast.LENGTH_SHORT,
+                                isUiContext,
+                                displayId,
+                                object : ITransientNotificationCallback.Stub() {
+                                    override fun onToastShown() {
+                                        // do nothing
+                                    }
 
-                                override fun onToastHidden() {
-                                    // do nothing
+                                    override fun onToastHidden() {
+                                        // do nothing
+                                    }
                                 }
-                            }
-                        )
+                            )
+                        } else {
+                            // Android 13 以下は enqueueTextToast() が変わってる、とりあえずリフレクションで
+                            ShizukuServiceTool.notification::class.java
+                                .methods
+                                .first { it.name == "enqueueTextToast" }
+                                .invoke(
+                                    ShizukuServiceTool.notification,
+                                    "com.android.shell",
+                                    Binder(),
+                                    getString(
+                                        // 変更
+                                        R.string.service_onstop_2_finish_and_remove_task_task_removed_toast_message_format,
+                                        removeTask.topActivityInfo?.loadLabel(packageManager)
+                                    ),
+                                    Toast.LENGTH_SHORT,
+                                    displayId,
+                                    object : ITransientNotificationCallback.Stub() {
+                                        override fun onToastShown() {
+                                            // do nothing
+                                        }
+
+                                        override fun onToastHidden() {
+                                            // do nothing
+                                        }
+                                    }
+                                )
+                        }
                     }
                 }
             }
