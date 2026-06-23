@@ -13,8 +13,8 @@ android {
         applicationId = "io.github.takusan23.onstop2finishandremovetask"
         minSdk = 31
         targetSdk = 37
-        versionCode = 3
-        versionName = "2.0.1"
+        versionCode = 4
+        versionName = "2.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -35,6 +35,12 @@ android {
     }
     androidResources {
         generateLocaleConfig = true
+    }
+    // F-Droid で配信するため
+    // https://gitlab.com/fdroid/fdroiddata/-/work_items/3330
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
     }
 }
 
