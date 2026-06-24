@@ -1,0 +1,6 @@
+add search to app-list screen.
+filterable name or application-id or system-app.
+
+add Shizuku notice screen. If unprepared Shizuku, show notice screen.
+
+fixed bug.
