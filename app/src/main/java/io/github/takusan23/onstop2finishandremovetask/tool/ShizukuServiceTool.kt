@@ -67,4 +67,10 @@ object ShizukuServiceTool {
         awaitShizuku()
         return Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
     }
+
+    /** root で shizuku を有効にした場合は true */
+    suspend fun checkRootMode(): Boolean {
+        awaitShizuku()
+        return Shizuku.getUid() == 0
+    }
 }

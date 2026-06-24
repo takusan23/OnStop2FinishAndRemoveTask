@@ -184,41 +184,18 @@ class OnStop2FinishAndRemoveTaskService : Service() {
                         // 削除する
                         ShizukuServiceTool.activity.removeTask(removeTask.taskId)
 
-                        // Shizuku 権限で Toast を出す
-                        val displayId = Context::class.java
-                            .methods
-                            .first { it.name == "getDisplayId" }
-                            .invoke(this@OnStop2FinishAndRemoveTaskService) as Int
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                            // android 14 以降
-                            ShizukuServiceTool.notification.enqueueTextToast(
-                                "com.android.shell",
-                                Binder(),
-                                getString(
-                                    // 変更
-                                    R.string.service_onstop_2_finish_and_remove_task_task_removed_toast_message_format,
-                                    removeTask.topActivityInfo?.loadLabel(packageManager)
-                                ),
-                                Toast.LENGTH_SHORT,
-                                isUiContext,
-                                displayId,
-                                object : ITransientNotificationCallback.Stub() {
-                                    override fun onToastShown() {
-                                        // do nothing
-                                    }
-
-                                    override fun onToastHidden() {
-                                        // do nothing
-                                    }
-                                }
-                            )
-                        } else {
-                            // Android 13 以下は enqueueTextToast() が変わってる、とりあえずリフレクションで
-                            ShizukuServiceTool.notification::class.java
+                        // TODO Shizuku が root 権限で利用されている場合、この Toast を出すコードは動かないため return
+                        // root ユーザーは packageName を持たないため "android" とかでも失敗する
+                        // Package com.android.shell is not owned by uid 0
+                        if (!ShizukuServiceTool.checkRootMode()) {
+                            // Shizuku 権限で Toast を出す
+                            val displayId = Context::class.java
                                 .methods
-                                .first { it.name == "enqueueTextToast" }
-                                .invoke(
-                                    ShizukuServiceTool.notification,
+                                .first { it.name == "getDisplayId" }
+                                .invoke(this@OnStop2FinishAndRemoveTaskService) as Int
+                            when {
+                                // android 15
+                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM -> ShizukuServiceTool.notification.enqueueTextToast(
                                     "com.android.shell",
                                     Binder(),
                                     getString(
@@ -227,6 +204,7 @@ class OnStop2FinishAndRemoveTaskService : Service() {
                                         removeTask.topActivityInfo?.loadLabel(packageManager)
                                     ),
                                     Toast.LENGTH_SHORT,
+                                    isUiContext,
                                     displayId,
                                     object : ITransientNotificationCallback.Stub() {
                                         override fun onToastShown() {
@@ -238,6 +216,60 @@ class OnStop2FinishAndRemoveTaskService : Service() {
                                         }
                                     }
                                 )
+
+                                // android 14 は 15 と引数は同じだが void を返す
+                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE -> ShizukuServiceTool.notification::class.java
+                                    .methods
+                                    .first { it.name == "enqueueTextToast" }
+                                    .invoke(
+                                        ShizukuServiceTool.notification,
+                                        "com.android.shell",
+                                        Binder(),
+                                        getString(
+                                            // 変更
+                                            R.string.service_onstop_2_finish_and_remove_task_task_removed_toast_message_format,
+                                            removeTask.topActivityInfo?.loadLabel(packageManager)
+                                        ),
+                                        Toast.LENGTH_SHORT,
+                                        isUiContext,
+                                        displayId,
+                                        object : ITransientNotificationCallback.Stub() {
+                                            override fun onToastShown() {
+                                                // do nothing
+                                            }
+
+                                            override fun onToastHidden() {
+                                                // do nothing
+                                            }
+                                        }
+                                    )
+
+                                // Android 13 以下は enqueueTextToast() が変わってる、とりあえずリフレクションで
+                                else -> ShizukuServiceTool.notification::class.java
+                                    .methods
+                                    .first { it.name == "enqueueTextToast" }
+                                    .invoke(
+                                        ShizukuServiceTool.notification,
+                                        "com.android.shell",
+                                        Binder(),
+                                        getString(
+                                            // 変更
+                                            R.string.service_onstop_2_finish_and_remove_task_task_removed_toast_message_format,
+                                            removeTask.topActivityInfo?.loadLabel(packageManager)
+                                        ),
+                                        Toast.LENGTH_SHORT,
+                                        displayId,
+                                        object : ITransientNotificationCallback.Stub() {
+                                            override fun onToastShown() {
+                                                // do nothing
+                                            }
+
+                                            override fun onToastHidden() {
+                                                // do nothing
+                                            }
+                                        }
+                                    )
+                            }
                         }
                     }
                 }
