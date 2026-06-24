@@ -17,4 +17,8 @@
     <string name="screen_setting_github_title">Open GitHub</string>
     <string name="screen_license_title">License</string>
     <string name="screen_app_list_search_bottomsheet_title">Search</string>
+    <string name="screen_shizuku_prepare_title">Waiting shizuku prepare</string>
+    <string name="screen_shizuku_prepare_description_title">This app is required "Shizuku"</string>
+    <string name="screen_shizuku_prepare_description_body">Use this app, Please install Shizuku and prepare. Thanks. \n(Maybe use Shizuku fork is better.)</string>
+    <string name="screen_shizuku_prepare_button">About Shizuku</string>
 </resources>

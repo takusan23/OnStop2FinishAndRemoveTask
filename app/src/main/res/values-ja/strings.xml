@@ -18,4 +18,8 @@
     <string name="screen_setting_github_title">GitHub を開く</string>
     <string name="screen_license_title">ライセンス</string>
     <string name="screen_app_list_search_bottomsheet_title">検索</string>
+    <string name="screen_shizuku_prepare_title">Shizuku の準備を待っています</string>
+    <string name="screen_shizuku_prepare_description_title">このアプリには「Shizuku」が必要です</string>
+    <string name="screen_shizuku_prepare_description_body">Shizuku をインストールし、初期設定を済ませてからこのアプリを利用してください。お手間をおかけします。\n（Shizuku は fork 版を使った方がよいかもしれません）</string>
+    <string name="screen_shizuku_prepare_button">Shizuku について</string>
 </resources>
