@@ -21,7 +21,7 @@ import android.content.ComponentName;
 import android.window.TaskSnapshot;
 
 /** TODO Android16 からコピー。Android17 でメソッドが削除されているが、一方 Android16 環境では必要なため。 */
-
+/** TODO OneUI だけ onTaskbarIconVisibleChangeRequest() が追加されており実装しないと例外を投げてくる、ろくなことしないな Galaxy */
 /** @hide */
 oneway interface ITaskStackListener {
     /** Activity was resized to be displayed in split-screen. */
@@ -227,4 +227,8 @@ oneway interface ITaskStackListener {
      * LockTaskController.
      */
     void onLockTaskModeChanged(int mode);
+
+    // Galaxy OneUI のみ
+    void onTaskbarIconVisibleChangeRequest(in ComponentName p0, boolean p1);
+    void onRecentTaskRemoved(int p0);
 }

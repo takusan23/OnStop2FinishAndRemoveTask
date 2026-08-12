@@ -151,6 +151,14 @@ class OnStop2FinishAndRemoveTaskService : Service() {
             override fun onLockTaskModeChanged(mode: Int) {
                 // do nothing
             }
+
+            override fun onTaskbarIconVisibleChangeRequest(p0: ComponentName?, p1: Boolean) {
+                // do nothing
+            }
+
+            override fun onRecentTaskRemoved(p0: Int) {
+                // do nothing
+            }
         }
 
         ShizukuServiceTool.activity.registerTaskStackListener(listener)
