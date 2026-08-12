@@ -39,8 +39,12 @@
         <service
             android:name=".OnStop2FinishAndRemoveTaskService"
             android:enabled="true"
-            android:exported="true"
-            android:foregroundServiceType="specialUse" />
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Detect leave app, Auto close it app in background." />
+        </service>
 
     </application>
 

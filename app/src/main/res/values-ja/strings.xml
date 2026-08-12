@@ -20,6 +20,6 @@
     <string name="screen_app_list_search_bottomsheet_title">検索</string>
     <string name="screen_shizuku_prepare_title">Shizuku の準備を待っています</string>
     <string name="screen_shizuku_prepare_description_title">このアプリには「Shizuku」が必要です</string>
-    <string name="screen_shizuku_prepare_description_body">Shizuku をインストールし、初期設定を済ませてからこのアプリを利用してください。お手間をおかけします。\n（Shizuku は fork 版を使った方がよいかもしれません）</string>
+    <string name="screen_shizuku_prepare_description_body">表示されているアプリを取得、アプリを閉じるための API は Android 内部 API なので、呼び出すために Shizuku が必要です。\nShizuku をインストールし、初期設定を済ませてからこのアプリを利用してください。お手間をおかけします。\n（Shizuku は fork 版を使った方がよいかもしれません）</string>
     <string name="screen_shizuku_prepare_button">Shizuku について</string>
 </resources>
