@@ -161,11 +161,31 @@ class OnStop2FinishAndRemoveTaskService : Service() {
                 // do nothing
             }
 
+            override fun onActivityDismissingSplitTask(p0: String?) {
+                // do nothing
+            }
+
             override fun onTaskbarIconVisibleChangeRequest(p0: ComponentName?, p1: Boolean) {
                 // do nothing
             }
 
+            override fun onTaskRecentsAnimationAdded(p0: Int) {
+                // do nothing
+            }
+
+            override fun onTaskRecentsAnimationRemoved(p0: Int) {
+                // do nothing
+            }
+
+            override fun onOccludeChangeNotice(p0: ComponentName?, p1: Boolean) {
+                // do nothing
+            }
+
             override fun onRecentTaskRemoved(p0: Int) {
+                // do nothing
+            }
+
+            override fun onTaskWindowingModeChanged(p0: Int) {
                 // do nothing
             }
         }

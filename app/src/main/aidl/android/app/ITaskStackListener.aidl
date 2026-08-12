@@ -21,7 +21,7 @@ import android.content.ComponentName;
 import android.window.TaskSnapshot;
 
 /** TODO Android16 からコピー。Android17 でメソッドが削除されているが、一方 Android16 環境では必要なため。 */
-/** TODO OneUI だけ onTaskbarIconVisibleChangeRequest() が追加されており実装しないと例外を投げてくる、ろくなことしないな Galaxy */
+/** TODO OneUI だけ関数がいくつか追加されており実装しないと例外を投げてくる、ろくなことしないな Galaxy */
 /** @hide */
 oneway interface ITaskStackListener {
     /** Activity was resized to be displayed in split-screen. */
@@ -228,7 +228,16 @@ oneway interface ITaskStackListener {
      */
     void onLockTaskModeChanged(int mode);
 
-    // Galaxy OneUI のみ
-    void onTaskbarIconVisibleChangeRequest(in ComponentName p0, boolean p1);
+    // Samsung OneUI Android15?
+    void onActivityDismissingSplitTask(String p0);
     void onRecentTaskRemoved(int p0);
+    void onTaskWindowingModeChanged(int p0);
+    void onTaskbarIconVisibleChangeRequest(in ComponentName p0, boolean p1);
+
+    // Samsung OneUI Android12
+    void onTaskRecentsAnimationAdded(int p0);
+    void onTaskRecentsAnimationRemoved(int p0);
+
+    // Samsung OneUI Android13
+    void onOccludeChangeNotice(in ComponentName p0, boolean p1);
 }

@@ -267,11 +267,9 @@ private fun NotificationPermissionCard(modifier: Modifier = Modifier) {
                 .fillMaxWidth()
                 .padding(5.dp)
         ) {
-            R.string.screen_app_list_permission_card_title
-            R.string.screen_app_list_permission_card_button
-            Text("通知権限を付与すると通知領域からサービスを終了できます。任意です。")
+            Text(stringResource(R.string.screen_app_list_permission_card_title))
             Button(onClick = { permissionRequester.launch(android.Manifest.permission.POST_NOTIFICATIONS) }) {
-                Text("付与する")
+                Text(stringResource(R.string.screen_app_list_permission_card_button))
             }
         }
     }
