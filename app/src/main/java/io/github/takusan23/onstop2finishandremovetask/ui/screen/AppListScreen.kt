@@ -1,5 +1,9 @@
 package io.github.takusan23.onstop2finishandremovetask.ui.screen
 
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -17,6 +22,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -36,7 +42,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import io.github.takusan23.onstop2finishandremovetask.OnStop2FinishAndRemoveTaskService
 import io.github.takusan23.onstop2finishandremovetask.R
 
 @Composable
@@ -66,6 +74,10 @@ fun AppListScreen(
         }
     ) { paddingValues ->
         LazyColumn(contentPadding = paddingValues) {
+            item {
+                // 通知権限があればサービスを停めることが出来ます通知
+                NotificationPermissionCard()
+            }
             items(appList.value, key = { it.packageName }) { info ->
                 AppListItem(
                     info = info,
@@ -229,5 +241,38 @@ private fun AppListItem(
             checked = info.isRegistered,
             onCheckedChange = { onCheck(it, info.packageName) }
         )
+    }
+}
+
+@Composable
+private fun NotificationPermissionCard(modifier: Modifier = Modifier) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+
+    val context = LocalContext.current
+    val isGranted = remember { mutableStateOf(ContextCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) }
+    val permissionRequester = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
+        if (result) {
+            // 再起動しておく...
+            isGranted.value = true
+            OnStop2FinishAndRemoveTaskService.stop(context)
+            OnStop2FinishAndRemoveTaskService.start(context)
+        }
+    }
+
+    if (isGranted.value) return
+
+    OutlinedCard(modifier = modifier.padding(5.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp)
+        ) {
+            R.string.screen_app_list_permission_card_title
+            R.string.screen_app_list_permission_card_button
+            Text("通知権限を付与すると通知領域からサービスを終了できます。任意です。")
+            Button(onClick = { permissionRequester.launch(android.Manifest.permission.POST_NOTIFICATIONS) }) {
+                Text("付与する")
+            }
+        }
     }
 }

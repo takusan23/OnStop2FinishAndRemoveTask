@@ -2,20 +2,21 @@ package io.github.takusan23.onstop2finishandremovetask
 
 import android.app.ActivityManager
 import android.app.ITaskStackListener
-import android.app.ITransientNotificationCallback
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
+import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.os.Binder
-import android.os.Build
+import android.content.IntentFilter
 import android.os.IBinder
 import android.widget.Toast
 import android.window.TaskSnapshot
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import io.github.takusan23.onstop2finishandremovetask.tool.RegisterAppListTool
 import io.github.takusan23.onstop2finishandremovetask.tool.ShizukuServiceTool
 import kotlinx.coroutines.MainScope
@@ -37,6 +38,14 @@ class OnStop2FinishAndRemoveTaskService : Service() {
     private val scope = MainScope()
 
     private val notificationManager by lazy { NotificationManagerCompat.from(this) }
+
+    private val broadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == ACTION_SERVICE_STOP) {
+                stopSelf()
+            }
+        }
+    }
 
     /**
      * 最前面に表示された Activity を取得する
@@ -177,6 +186,14 @@ class OnStop2FinishAndRemoveTaskService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+
+        // サービスを止められるように BroadcastReceiver
+        // 通知のボタンから発行されるので exported ?
+        val intentFilter = IntentFilter().apply {
+            addAction(ACTION_SERVICE_STOP)
+        }
+        ContextCompat.registerReceiver(this, broadcastReceiver, intentFilter, ContextCompat.RECEIVER_EXPORTED)
+
         scope.launch {
             RegisterAppListTool.realtimeReadApplicationIdList(this@OnStop2FinishAndRemoveTaskService).collectLatest { idList ->
 
@@ -192,93 +209,13 @@ class OnStop2FinishAndRemoveTaskService : Service() {
                         // 削除する
                         ShizukuServiceTool.activity.removeTask(removeTask.taskId)
 
-                        // TODO Shizuku が root 権限で利用されている場合、この Toast を出すコードは動かないため return
-                        // root ユーザーは packageName を持たないため "android" とかでも失敗する
-                        // Package com.android.shell is not owned by uid 0
-                        if (!ShizukuServiceTool.checkRootMode()) {
-                            // Shizuku 権限で Toast を出す
-                            val displayId = Context::class.java
-                                .methods
-                                .first { it.name == "getDisplayId" }
-                                .invoke(this@OnStop2FinishAndRemoveTaskService) as Int
-                            when {
-                                // android 15
-                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM -> ShizukuServiceTool.notification.enqueueTextToast(
-                                    "com.android.shell",
-                                    Binder(),
-                                    getString(
-                                        // 変更
-                                        R.string.service_onstop_2_finish_and_remove_task_task_removed_toast_message_format,
-                                        removeTask.topActivityInfo?.loadLabel(packageManager)
-                                    ),
-                                    Toast.LENGTH_SHORT,
-                                    isUiContext,
-                                    displayId,
-                                    object : ITransientNotificationCallback.Stub() {
-                                        override fun onToastShown() {
-                                            // do nothing
-                                        }
-
-                                        override fun onToastHidden() {
-                                            // do nothing
-                                        }
-                                    }
-                                )
-
-                                // android 14 は 15 と引数は同じだが void を返す
-                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE -> ShizukuServiceTool.notification::class.java
-                                    .methods
-                                    .first { it.name == "enqueueTextToast" }
-                                    .invoke(
-                                        ShizukuServiceTool.notification,
-                                        "com.android.shell",
-                                        Binder(),
-                                        getString(
-                                            // 変更
-                                            R.string.service_onstop_2_finish_and_remove_task_task_removed_toast_message_format,
-                                            removeTask.topActivityInfo?.loadLabel(packageManager)
-                                        ),
-                                        Toast.LENGTH_SHORT,
-                                        isUiContext,
-                                        displayId,
-                                        object : ITransientNotificationCallback.Stub() {
-                                            override fun onToastShown() {
-                                                // do nothing
-                                            }
-
-                                            override fun onToastHidden() {
-                                                // do nothing
-                                            }
-                                        }
-                                    )
-
-                                // Android 13 以下は enqueueTextToast() が変わってる、とりあえずリフレクションで
-                                else -> ShizukuServiceTool.notification::class.java
-                                    .methods
-                                    .first { it.name == "enqueueTextToast" }
-                                    .invoke(
-                                        ShizukuServiceTool.notification,
-                                        "com.android.shell",
-                                        Binder(),
-                                        getString(
-                                            // 変更
-                                            R.string.service_onstop_2_finish_and_remove_task_task_removed_toast_message_format,
-                                            removeTask.topActivityInfo?.loadLabel(packageManager)
-                                        ),
-                                        Toast.LENGTH_SHORT,
-                                        displayId,
-                                        object : ITransientNotificationCallback.Stub() {
-                                            override fun onToastShown() {
-                                                // do nothing
-                                            }
-
-                                            override fun onToastHidden() {
-                                                // do nothing
-                                            }
-                                        }
-                                    )
-                            }
-                        }
+                        // 謎だが POST_NOTIFICATION 権限がないと Toast をバックグラウンドから出すことが出来ない
+                        val message = getString(
+                            // 変更
+                            R.string.service_onstop_2_finish_and_remove_task_task_removed_toast_message_format,
+                            removeTask.topActivityInfo?.loadLabel(packageManager)
+                        )
+                        Toast.makeText(this@OnStop2FinishAndRemoveTaskService, message, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -293,6 +230,7 @@ class OnStop2FinishAndRemoveTaskService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         scope.cancel()
+        unregisterReceiver(broadcastReceiver)
     }
 
     private fun startForegroundService() {
@@ -305,12 +243,24 @@ class OnStop2FinishAndRemoveTaskService : Service() {
         val notification = NotificationCompat.Builder(this, CHANNEL_ID).apply {
             setContentTitle(getString(R.string.service_onstop_2_finish_and_remove_task_running_notification_title))
             setContentText(getString(R.string.service_onstop_2_finish_and_remove_task_running_notification_text))
-            setSmallIcon(R.drawable.ic_launcher_foreground)
+            setSmallIcon(R.drawable.onstop2finishandremovetask)
+            // 終了ボタンを追加
+            val stopPendingIntent = PendingIntent.getBroadcast(this@OnStop2FinishAndRemoveTaskService, 1, Intent(ACTION_SERVICE_STOP), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+            addAction(NotificationCompat.Action(R.drawable.onstop2finishandremovetask, getString(R.string.service_onstop_2_finish_and_remove_task_running_notification_action_stop), stopPendingIntent))
         }.build()
         startForeground(1, notification)
     }
 
     companion object {
         private const val CHANNEL_ID = "running_notification_channel_id"
+        private const val ACTION_SERVICE_STOP = "io.github.takusan23.onstop2finishandremovetask.action_service_stop"
+
+        fun stop(context: Context) {
+            context.stopService(Intent(context, OnStop2FinishAndRemoveTaskService::class.java))
+        }
+
+        fun start(context: Context) {
+            ContextCompat.startForegroundService(context, Intent(context, OnStop2FinishAndRemoveTaskService::class.java))
+        }
     }
 }

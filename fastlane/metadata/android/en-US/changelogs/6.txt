@@ -1,2 +1,4 @@
+Fix not working Samsung OneUI.
 Append description to PrepareScreen.
+Showing running notification. Its notification add service stop button.
 and refactoring.

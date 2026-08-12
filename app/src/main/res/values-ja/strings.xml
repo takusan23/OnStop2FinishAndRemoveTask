@@ -8,12 +8,14 @@
     <string name="service_onstop_2_finish_and_remove_task_notification_channel_name">実行中通知</string>
     <string name="service_onstop_2_finish_and_remove_task_running_notification_title">OnStop2FinishAndRemoveTask 実行中通知</string>
     <string name="service_onstop_2_finish_and_remove_task_running_notification_text">動作中です</string>
+    <string name="service_onstop_2_finish_and_remove_task_running_notification_action_stop">サービス終了</string>
     <string name="service_onstop_2_finish_and_remove_task_task_removed_toast_message_format">[%s]タスクを削除しました</string>
     <string name="screen_app_list_search_bottomsheet_search_app_name">アプリ名</string>
     <string name="screen_app_list_search_bottomsheet_search_package_name">アプリケーションID名</string>
     <string name="screen_app_list_search_bottomsheet_include_system_app">システムアプリを含める</string>
     <string name="screen_app_list_search_bottomsheet_only_register_app">登録済みのみを表示する</string>
     <string name="screen_setting_title">設定</string>
+    <string name="screen_setting_stop_service">サービス終了</string>
     <string name="screen_setting_license_title">ライセンス</string>
     <string name="screen_setting_github_title">GitHub を開く</string>
     <string name="screen_license_title">ライセンス</string>
@@ -22,4 +24,6 @@
     <string name="screen_shizuku_prepare_description_title">このアプリには「Shizuku」が必要です</string>
     <string name="screen_shizuku_prepare_description_body">表示されているアプリを取得、アプリを閉じるための API は Android 内部 API なので、呼び出すために Shizuku が必要です。\nShizuku をインストールし、初期設定を済ませてからこのアプリを利用してください。お手間をおかけします。\n（Shizuku は fork 版を使った方がよいかもしれません）</string>
     <string name="screen_shizuku_prepare_button">Shizuku について</string>
+    <string name="screen_app_list_permission_card_button">付与する</string>
+    <string name="screen_app_list_permission_card_title">通知権限を付与すると通知領域からサービスを終了できます。（任意です）</string>
 </resources>

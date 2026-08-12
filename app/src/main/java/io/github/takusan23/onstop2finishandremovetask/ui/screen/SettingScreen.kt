@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import io.github.takusan23.onstop2finishandremovetask.OnStop2FinishAndRemoveTaskService
 import io.github.takusan23.onstop2finishandremovetask.R
 
 private val GitHubUrl = "https://github.com/takusan23/OnStop2FinishAndRemoveTask"
@@ -31,6 +32,12 @@ fun SettingScreen(onNavigation: (RoutePaths) -> Unit) {
         }
     ) { paddingValues ->
         LazyColumn(contentPadding = paddingValues) {
+            item {
+                SettingItem(
+                    title = stringResource(R.string.screen_setting_stop_service),
+                    onClick = { OnStop2FinishAndRemoveTaskService.stop(context) }
+                )
+            }
             item {
                 SettingItem(
                     title = stringResource(R.string.screen_setting_license_title),

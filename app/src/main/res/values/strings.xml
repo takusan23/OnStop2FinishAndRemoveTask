@@ -7,12 +7,14 @@
     <string name="service_onstop_2_finish_and_remove_task_notification_channel_name">Running Notification</string>
     <string name="service_onstop_2_finish_and_remove_task_running_notification_title">OnStop2FinishAndRemoveTask Running</string>
     <string name="service_onstop_2_finish_and_remove_task_running_notification_text">Service is active</string>
+    <string name="service_onstop_2_finish_and_remove_task_running_notification_action_stop">Stop service</string>
     <string name="service_onstop_2_finish_and_remove_task_task_removed_toast_message_format">[%s] task removed</string>
     <string name="screen_app_list_search_bottomsheet_search_app_name">App name</string>
     <string name="screen_app_list_search_bottomsheet_search_package_name">Application id name</string>
     <string name="screen_app_list_search_bottomsheet_include_system_app">Include system apps</string>
     <string name="screen_app_list_search_bottomsheet_only_register_app">Only Register apps</string>
     <string name="screen_setting_title">Settings</string>
+    <string name="screen_setting_stop_service">Stop service</string>
     <string name="screen_setting_license_title">License</string>
     <string name="screen_setting_github_title">Open GitHub</string>
     <string name="screen_license_title">License</string>
@@ -21,4 +23,6 @@
     <string name="screen_shizuku_prepare_description_title">This app is required "Shizuku"</string>
     <string name="screen_shizuku_prepare_description_body">Showing app and close app, It api is Android internal API, It API invoke from Shizuku.\nPlease install Shizuku and prepare. Thanks. \n(Maybe use Shizuku fork is better.)</string>
     <string name="screen_shizuku_prepare_button">About Shizuku</string>
+    <string name="screen_app_list_permission_card_button">Grant</string>
+    <string name="screen_app_list_permission_card_title">If granted notification permission, stoppable service from notification area. (optional)</string>
 </resources>

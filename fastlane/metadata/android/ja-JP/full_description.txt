@@ -10,5 +10,6 @@ https://shizuku.rikka.app/
 これらの関数は内部の関数なので、それらを呼び出すために Shizuku を利用しています。
 
 利用する権限：
+POST_NOTIFICATIONS: （任意です）通知領域に通知を出してサービスを終了できるようにします。
 QUERY_ALL_PACKAGES: 登録画面でアプリ一覧を取得するのに利用します。
 FOREGROUND_SERVICE、FOREGROUND_SERVICE_SPECIAL_USE: バックグラウンドでアプリを離れたか検出するため、フォアグラウンドサービスを利用します。

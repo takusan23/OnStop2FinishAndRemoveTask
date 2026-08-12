@@ -1,11 +1,9 @@
 package io.github.takusan23.onstop2finishandremovetask
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import io.github.takusan23.onstop2finishandremovetask.tool.ShizukuServiceTool
 import io.github.takusan23.onstop2finishandremovetask.ui.screen.MainScreen
@@ -34,7 +32,7 @@ class MainActivity : ComponentActivity() {
             ShizukuServiceTool.awaitShizukuPermission()
 
             // Foreground Service 開始
-            ContextCompat.startForegroundService(this@MainActivity, Intent(this@MainActivity, OnStop2FinishAndRemoveTaskService::class.java))
+            OnStop2FinishAndRemoveTaskService.start(context = this@MainActivity)
         }
     }
 

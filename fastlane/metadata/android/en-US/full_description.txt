@@ -10,5 +10,6 @@ Observe current Activity From Foreground service. If change other app, Invoke re
 this APIs Invoke by Shizuku. that's because, using API is Internal-API.
 
 Using Permission:
+POST_NOTIFICATIONS: (optional) Showing notification and add stop service button.
 QUERY_ALL_PACKAGES: It because, Get app list from register screen.
 FOREGROUND_SERVICE、FOREGROUND_SERVICE_SPECIAL_USE: It because, Detect leave app by ForegroundService.
