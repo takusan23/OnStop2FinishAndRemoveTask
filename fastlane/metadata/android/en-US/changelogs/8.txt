@@ -1,0 +1,1 @@
+Optimize apk size (enable to R8)
