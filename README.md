@@ -15,10 +15,10 @@ GitHub Release
 
 https://github.com/takusan23/OnStop2FinishAndRemoveTask/releases
 
-`F-Droid` からもダウンロードできるようになる予定です。（現在レビュー中です）  
-Planned available for Download from `F-Droid`. (currently reviewing)
+`F-Droid`からもダウンロードできます（レビューしてくれた方ありがとう！）。ダウンロードできる`APK`は`GitHub Release`と同じです（再現可能ビルドを有効にしてあります）。 
+Available download from `F-Droid` (Thanks for reviewer!). Download apk is same as `GitHub Release` (Reproducible build enabled).
 
-詳しくは/more→ https://gitlab.com/fdroid/fdroiddata/-/merge_requests/41143
+https://f-droid.org/ja/packages/io.github.takusan23.onstop2finishandremovetask/
 
 # 仕組み / How to work
 
